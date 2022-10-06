@@ -7,7 +7,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. PGEXE003.
        ENVIRONMENT DIVISION.
-       CONFIGURATION DIVISION.
+       CONFIGURATION SECTION.
        SPECIAL-NAMES.
            DECIMAL-POINT IS COMMA.
        DATA DIVISION.
@@ -21,7 +21,7 @@
           03 FILLER           PIC X.
           03 WS-DATA-AA       PIC 9(04).
        77 WS-NOME-MES-AUX     PIC X(15) VALUES SPACES.
-       77 ES-TECLA-AUX        PIC X.
+       77 WS-TECLA-AUX        PIC X.
 
        01 WS-MESES-ANO        PIC 99 VALUE ZEROS.
           88 WS-MES-ATUAL            VALUE 1 THRU 12.
@@ -44,7 +44,7 @@
                DISPLAY "MES VERDADEIRO: " WS-MESES-ANO
             ELSE
                DISPLAY "ESSE MES NAO EXISTE: " WS-MESES-ANO
-            ENDE-IF.
+            END-IF.
 
             MOVE 31           TO WS-DIAS-MES.
 
@@ -66,13 +66,13 @@
 
             MOVE SPACES       TO WS-DATA
                                  WS-NOME-MES-AUX
-                                 WS-TECLA-AUX
+                                 WS-TECLA-AUX.
             DISPLAY "INFORME UMA DATA: ".
-            ACCEPT WS-DATA.
+            ACCEPT  WS-DATA.
 
-            PERFORM P200-VER-MES   THRU P200-VER-MES-FIM.
-            PERFORM P300-MOSTRA    THRU P300-MOSTRA-FIM.
-            PERFORM P900-TERMINAL  THRU P900-TERMINAL-FIM.
+            PERFORM P200-VER-MES   THRU   P200-VER-MES-FIM.
+            PERFORM P300-MOSTRA    THRU   P300-MOSTRA-FIM.
+            PERFORM P900-TERMINAL  THRU   P900-TERMINAL-FIM.
        P100-INICIAL-FIM.
       *******************************************************************
       *     VERIFICA QUAL O MES DA DATA DIGITADA PELO USUARIO           *
@@ -82,9 +82,53 @@
 
             EVALUATE WS-DATA-MM
                 WHEN 01
+                     MOVE "JANEIRO"         TO WS-NOME-MES-AUX
+                WHEN 02
+                     MOVE "FEVEREIRO"       TO WS-NOME-MES-AUX
+                WHEN 03
+                     MOVE "MARÇO"           TO WS-NOME-MES-AUX
+                WHEN 04
+                     MOVE "ABRIL"           TO WS-NOME-MES-AUX
+                WHEN 05
+                     MOVE "MAIO"            TO WS-NOME-MES-AUX
+                WHEN 06
+                     MOVE "JUNHO"           TO WS-NOME-MES-AUX
+                WHEN 07
+                     MOVE "JULHO"           TO WS-NOME-MES-AUX
+                WHEN 08
+                     MOVE "AGOSTO"          TO WS-NOME-MES-AUX
+                WHEN 09
+                     MOVE "SETEMBRO"        TO WS-NOME-MES-AUX
+                WHEN 10
+                     MOVE "OUTUBRO"         TO WS-NOME-MES-AUX
+                WHEN 11
+                     MOVE "NOVEMBRO"        TO WS-NOME-MES-AUX
+                WHEN 12
+                     MOVE "DEZEMBRO"        TO WS-NOME-MES-AUX
+            END-EVALUATE.
 
+       P200-VER-MES-FIM.
+      *******************************************************************
+      *     MOSTRAR O RESULTADO COM OPÇÃO DE REPROCESSAMENTO            *
+      *******************************************************************
+       P300-MOSTRA.
 
-       MAIN-PROCEDURE.
-            DISPLAY "Hello world"
+            DISPLAY "EXIBINDO O RESULTADO DO PROCESSAMENTO".
+
+            DISPLAY "O MES DA DATA INFORMADA EH: " WS-NOME-MES-AUX.
+
+            DISPLAY "TECLE <C> PARA CONTINUAR OU <T> PARA TERMINAR".
+            ACCEPT WS-TECLA-AUX.
+
+            IF WS-TECLA-AUX = "C" THEN
+               PERFORM P100-INICIAL         THRU P100-INICIAL-FIM
+            END-IF.
+
+       P300-MOSTRA-FIM.
+      *******************************************************************
+      *     FINALIZAR O PROGRAMA                                        *
+      *******************************************************************
+       P900-TERMINAL.
             STOP RUN.
+       P900-TERMINAL-FIM.
        END PROGRAM PGEXE003.
